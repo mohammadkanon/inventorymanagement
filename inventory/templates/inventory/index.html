@@ -1,0 +1,69 @@
+{% extends 'inventory/base.html' %}
+
+{% block body %}
+<br>
+
+<div class="button-group">
+
+	<a href="{% url 'display-laptop' %}" class="btn btn-primary btn-md" role="button">Laptop</a>
+	<a href="{% url 'add-laptop' %}" class="btn btn-warning btn-sm" role="button"> + </a>
+
+	<a href="{% url 'display-desktop' %}" class="btn btn-primary btn-md" role="button">Desktop</a>
+	<a href="{% url 'add-desktop' %}" class="btn btn-warning btn-sm" role="button"> + </a>
+
+	<a href="{% url 'display-mobile' %}" class="btn btn-primary btn-md" role="button">Mobile</a>
+	<a href="{% url 'add-mobile' %}" class="btn btn-warning btn-sm" role="button"> + </a>
+
+</div>
+<br>
+<h2>Currently viewing {{ header }}</h2>
+
+<br>
+
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Model</th>
+			<th>Price</th>
+			<th>Status</th>
+			<th>Issue</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in items %}
+		<tr>
+			<td>{{ item.pk }}</td>
+			<td>{{ item.type }}</td>
+			<td>{{ item.price }}</td>
+			<td>{{ item.status }}</td>
+			<td>{{ item.issuse }}</td>
+			{% if header|lower == 'laptops' %}
+			<td>
+				<a href="{% url 'edit-laptop' item.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
+				<a href="{% url 'delete-laptop' item.pk %}" class="btn btn-danger btn-sm" role="button">Delete</a>
+			</td>
+			{% elif header|lower == 'desktops' %}
+			<td>
+				<a href="{% url 'edit-desktop' item.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
+				<a href="{% url 'delete-desktop' item.pk %}" class="btn btn-danger btn-sm" role="button">Delete</a>
+			</td>
+			{% else %}
+			<td>
+				<a href="{% url 'edit-mobile' item.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
+				<a href="{% url 'delete-mobile' item.pk %}" class="btn btn-danger btn-sm" role="button">Delete</a>
+				<form method='POST'>
+					{% csrf_token %}
+					<input type="hidden" name="item_id" value="{{ item.pk }}">
+					<button class="btn btn-danger btn-sm" role="button">Remove</a>
+				</form>
+			</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<br>
+
+{% endblock %}
